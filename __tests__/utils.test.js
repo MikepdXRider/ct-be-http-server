@@ -75,7 +75,7 @@ describe('tests app behaviors', () => {
     });
     
     //  - throws if failure happens in deserialization
-    it('parseBody returns deserialized body from req emitted events (using JSON.parse)', async () => {
+    it('parseBody throws if failure happens in deserialization', async () => {
       // asigns a new eventemitter to req variable. An event emitter will allow an event listener to be triggered.
       const request = new EventEmitter();
       // assigns the content header type to our request so our listener/parsebody function knows how to handle.
