@@ -8,6 +8,7 @@ const request = require('supertest');
 const { rmdir, mkdir } = require('fs/promises');
 // import parseBody function
 const parseBody = require('../lib/utils/parse-body.js');
+const { error } = require('console');
 
 // create a new route
 const ROOTDIR = './store';
@@ -38,7 +39,22 @@ describe('tests app behaviors', () => {
 
     expect(actual).toEqual(null);
   });
+
   //  - throws if content-type is not application/json
+  it('parseBody throws an error if the content-type is not application/json', async () => {
+    const fakeRequest = {
+      method: 'POST',
+      headers: {
+        'content-type': 'text'
+      }
+    };
+
+    try {
+      await parseBody(fakeRequest);
+    } catch (e) {
+      expect(e).toEqual('content-type must be application/json');
+    }
+  });
   //  - returns deserialized body from req emitted events (using JSON.parse)
   //  - throws if failure happens in deserialization
     
