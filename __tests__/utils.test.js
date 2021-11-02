@@ -91,6 +91,7 @@ describe('tests app behaviors', () => {
       // using the define request eventemitter, emit an 'end' event(single param). This event is important because our parseBody function will be listening for this type of event to trigger the pending promise to resolve/reject. 
       request.emit('end');
       
+      // because we're testing for a promise to throw an error, we must use a try...catch to catch the returning/expected error. 
       try {
         // call parseBody(request) again?? ❗ THIS DOESN"T MAKE ANY SENSE TO ME ❗!
         await promise;
