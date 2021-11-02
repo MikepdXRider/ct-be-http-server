@@ -75,6 +75,27 @@ describe('tests app behaviors', () => {
     });
     
     //  - throws if failure happens in deserialization
+    it('parseBody returns deserialized body from req emitted events (using JSON.parse)', async () => {
+      // asigns a new eventemitter to req variable. An event emitter will allow an event listener to be triggered.
+      const request = new EventEmitter();
+      // assigns the content header type to our request so our listener/parsebody function knows how to handle.
+      request.headers = { 'content-type': 'application/json' };
+      // assigns the method type to our request so our listener/parsebody function knows how to handle. 
+      request.method = 'POST';
+      // call parseBody passing it the request. ❗ IDK WHY THIS IS DONE HERE AND IS USED LATER ❗!?
+      const promise = parseBody(request);
+      // using the defined request eventemitter, emit a 'data' event(first param) and the desired bad JSON data chunk(second param). The 'data' event is important because our parseBody function will be listening for this type of event so it can be handled. 
+      request.emit('data', 'test');
+      // see the previous comment. This is the second chunk. Which will be organized and connected to the previous chunk in our parseBody function.
+      request.emit('data', 'success');
+      // using the define request eventemitter, emit an 'end' event(single param). This event is important because our parseBody function will be listening for this type of event to trigger the pending promise to resolve/reject. 
+      request.emit('end');
+      
+      // call parseBody(request) again?? ❗ THIS DOESN"T MAKE ANY SENSE TO ME ❗!
+      const body = await promise;
+      // once the promise resolves, check that it returns the expected parsed object. 
+      expect(body).toEqual('Terrible JSON');
+    });
   });
     
 
