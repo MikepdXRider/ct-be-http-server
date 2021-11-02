@@ -5,17 +5,17 @@
 // import request from supertest
 // const request = require('supertest');
 // import rmdir and mkdir promises from fs.
-const { rmdir, mkdir } = require('fs/promises');
+// const { rmdir, mkdir } = require('fs/promises');
 // import parseBody function
 const parseBody = require('../lib/utils/parse-body.js');
 // import eventemitter from events
 const EventEmitter = require('events');
-const { executionAsyncId } = require('async_hooks');
 
 
 // create a new route
-const ROOTDIR = './store';
+// const ROOTDIR = './store';
 
+jest.setTimeout(10000);
 
 // create a simpleDB instance for testing purposes
 // const testDb = new SimpleDb(ROOTDIR);
@@ -59,8 +59,8 @@ describe('tests app behaviors', () => {
       request.headers = { 'content-type': 'application/json' };
       // assigns the method type to our request so our listener/parsebody function knows how to handle. 
       request.method = 'POST';
-      // call parseBody passing it the request, this must be done asynchonously because the data will be recieved in parts and parseBody will not resolve until our request event ends. 
-      const promise = await parseBody(request);
+      // call parseBody passing it the request. ❗ IDK WHY THIS IS DONE HERE AND IS USED LATER ❗!?
+      const promise = parseBody(request);
       // using the defined request eventemitter, emit a 'data' event(first param) and the desired JSON data chunk(second param). The 'data' event is important because our parseBody function will be listening for this type of event so it can be handled. 
       request.emit('data', '{ "test": ');
       // see the previous comment. This is the second chunk. Which will be organized and connected to the previous chunk in our parseBody function.
@@ -68,8 +68,10 @@ describe('tests app behaviors', () => {
       // using the define request eventemitter, emit an 'end' event(single param). This event is important because our parseBody function will be listening for this type of event to trigger the pending promise to resolve/reject. 
       request.emit('end');
     
+      // call parseBody(request) again?? ❗ THIS DOESN"T MAKE ANY SENSE TO ME ❗!
+      const body = await promise;
       // once the promise resolves, check that it returns the expected parsed object. 
-      expect(promise).toEqual({ test: 'success' });
+      expect(body).toEqual({ test: 'success' });
     });
     
     //  - throws if failure happens in deserialization
