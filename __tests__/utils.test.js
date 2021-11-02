@@ -32,9 +32,11 @@ describe('tests app behaviors', () => {
   //        - Then move to resource.js to create the resource map to accomplish this task.
   //        - Continue through the list. Then start working on tests for resource router. 
   it('parseBody returns null if method is not POST, PUT, or PATCH', async () => {
-    const actual = await request(app).get('/');
+    const fakeRequest = { method: 'GET' };
+    
+    const actual = await parseBody(fakeRequest);
 
-    expect(actual.text).toEqual('null');
+    expect(actual).toEqual(null);
   });
   //  - throws if content-type is not application/json
   //  - returns deserialized body from req emitted events (using JSON.parse)
