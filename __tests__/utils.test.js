@@ -34,7 +34,7 @@ describe('tests app behaviors', () => {
   it('parseBody returns null if method is not POST, PUT, or PATCH', async () => {
     const actual = await request(app).get('/');
 
-    expect(actual.body).toEqual(null);
+    expect(actual.text).toEqual('null');
   });
   //  - throws if content-type is not application/json
   //  - returns deserialized body from req emitted events (using JSON.parse)
