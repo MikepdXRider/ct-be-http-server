@@ -4,6 +4,8 @@ const app = require('../lib/app.js');
 const SimpleDb = require('../SimpleDB.js');
 // import request from supertest
 const request = require('supertest');
+// import rmdir and mkdir promises from fs.
+const { rmdir, mkdir } = require('fs/promises');
 
 // create a new route
 const ROOTDIR = './store';
@@ -17,7 +19,8 @@ describe('tests app behaviors', () => {
   
   // create a beforeEach method which clears the stored folders/files.
   beforeEach(() => {
-
+    return rmdir(ROOTDIR, { recursive: true, force: true })
+      .then(() => mkdir(ROOTDIR));
   });
 
   // tests for body parser:
