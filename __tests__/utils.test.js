@@ -1,19 +1,20 @@
 // import app for testing.
-// const app = require('../lib/app.js');
+const app = require('../lib/app.js');
 // import simpleDB for instance creation and use.
-// const SimpleDb = require('../SimpleDB.js');
+const SimpleDb = require('../SimpleDB.js');
 // import request from supertest
-// const request = require('supertest');
+const request = require('supertest');
 // import rmdir and mkdir promises from fs.
-// const { rmdir, mkdir } = require('fs/promises');
+const { rmdir, mkdir } = require('fs/promises');
 // import parseBody function
 const parseBody = require('../lib/utils/parse-body.js');
 // import eventemitter from events
 const EventEmitter = require('events');
+const { get } = require('http');
 
 
 // create a new route
-// const ROOTDIR = './store';
+const ROOTDIR = './store';
 
 jest.setTimeout(10000);
 
@@ -27,7 +28,7 @@ describe('tests app behaviors', () => {
   describe('tests body parser function behavior', () => {
     // tests for body parser:
     //  - returns null if method is not POST, PUT, or PATCH
-    it('parseBody returns null if method is not POST, PUT, or PATCH', async () => {
+    it('it returns null if method is not POST, PUT, or PATCH', async () => {
       const fakeRequest = { method: 'GET' };
         
       const actual = await parseBody(fakeRequest);
@@ -36,7 +37,7 @@ describe('tests app behaviors', () => {
     });
     
     //  - throws if content-type is not application/json
-    it('parseBody throws an error if the content-type is not application/json', async () => {
+    it('it throws an error if the content-type is not application/json', async () => {
       const fakeRequest = {
         method: 'POST',
         headers: {
@@ -52,7 +53,7 @@ describe('tests app behaviors', () => {
     });
     
     //  - returns deserialized body from req emitted events (using JSON.parse)
-    it('parseBody returns deserialized body from req emitted events (using JSON.parse)', async () => {
+    it('it returns deserialized body from req emitted events (using JSON.parse)', async () => {
       // asigns a new eventemitter to req variable. An event emitter will allow an event listener to be triggered.
       const request = new EventEmitter();
       // assigns the content header type to our request so our listener/parsebody function knows how to handle.
@@ -75,7 +76,7 @@ describe('tests app behaviors', () => {
     });
     
     //  - throws if failure happens in deserialization
-    it('parseBody throws if failure happens in deserialization', async () => {
+    it('it throws if failure happens in deserialization', async () => {
       // asigns a new eventemitter to req variable. An event emitter will allow an event listener to be triggered.
       const request = new EventEmitter();
       // assigns the content header type to our request so our listener/parsebody function knows how to handle.
@@ -103,19 +104,37 @@ describe('tests app behaviors', () => {
   });
     
 
-  //   describe('tests resource router behavior', () => {
-  // create a beforeEach method which clears the stored folders/files.
-  // beforeEach(() => {
-  //   return rmdir(ROOTDIR, { recursive: true, force: true })
-  //     .then(() => mkdir(ROOTDIR));
-  // });
+  describe('tests resource router behavior', () => {
+    //   create a beforeEach method which clears the stored folders/files.
+    beforeEach(() => {
+      return rmdir(ROOTDIR, { recursive: true, force: true })
+        .then(() => mkdir(ROOTDIR));
+    });
 
-  // tests for resource router:  
-  //  - should match POST /cats and GET /cats/:id
-  //  - should GET /cats
-  //  - should PUT /cats/:id
-  //  - should DELETE /cats/:id
-//   }); 
+    //   tests for resource router:  
+    //    - should match POST /cats and GET /cats/:id
+    it('should match POST /spoons and GET /spoons/:id', async () => {
+      const newSpoon = {
+        type: 'soup',
+        material: 'steel',
+        description: 'A spoon you would use to serve soup'
+      };
+
+      const stringifiedNewSpoon = JSON.stringify(newSpoon);
+
+      const postResponse = await request(app)
+        .post('/spoons')
+        .send(stringifiedNewSpoon);
+
+      const getResponse = await request(app)
+        .get(`/spoons/${postResponse.id}`);
+
+      expect(getResponse.body).toEqual(postResponse.body);
+    });
+    //    - should GET /cats
+    //    - should PUT /cats/:id
+    //    - should DELETE /cats/:id
+  }); 
 });
 
 
