@@ -131,7 +131,26 @@ describe('tests app behaviors', () => {
 
       expect(getResponse.body).toEqual(postResponse.body);
     });
+
+
     //    - should GET /cats
+    it('should get /spoons', async () => {
+      const newSpoon = { type: 'soup', material: 'steel', description: 'A spoon you would use to serve soup' };
+      const newSpoon2 = { type: 'salad', material: 'silver', description: 'A spoon you would use to serve salad' };
+      const newSpoon3 = { type: 'meat', material: 'meat', description: 'An edible meat spoon you would use to eat meat' };
+      const spoonsArr = [newSpoon, newSpoon2, newSpoon3];
+
+    // map through spoonsarr and make a post request per each.
+      await Promise.all(spoonsArr.map(async (obj) => 
+        await request(app)
+          .post('/spoons')
+          .send(obj)));
+    // get all them spoons.
+      const getResponse = await request(app)
+        .get('/spoons');
+    //   spoons be spoons?
+      expect(getResponse.body).toEqual(expect.arrayContaining([...newSpoon, id: expect.any(Number)]));
+    });
     //    - should PUT /cats/:id
     //    - should DELETE /cats/:id
   }); 
