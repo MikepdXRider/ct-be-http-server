@@ -42,10 +42,16 @@ module.exports = {
   'delete': async (req, res) => {
     const [, , id] = req.url.split('/');
 
-    if (id) await db.remove(id);
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'plain/text');
-    res.end('Resource Deleted!');
+    if (id){
+      await db.remove(id);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'plain/text');
+      res.end('Resource Deleted!');
+    } else {
+      res.statusCode = 404;
+      res.setHeader('Content-Type', 'plain/text');
+      res.end('No ID provided');
+    }
   }
 };
 

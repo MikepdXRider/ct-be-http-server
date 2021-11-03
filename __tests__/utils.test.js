@@ -180,7 +180,7 @@ describe('tests app behaviors', () => {
 
 
     //    - should DELETE /cats/:id
-    it('PUTs /spoons/id', async () => {
+    it('Deletes /spoons/id', async () => {
       const newSpoon = { type: 'soup', material: 'steel', description: 'A spoon you would use to serve soup' };
     
       // send newspoon to server/db
