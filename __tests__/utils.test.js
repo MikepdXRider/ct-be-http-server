@@ -160,23 +160,44 @@ describe('tests app behaviors', () => {
       const newSpoon = { type: 'soup', material: 'steel', description: 'A spoon you would use to serve soup' };
       const edittedSpoon = { type: 'cup', material: 'plastic', description: 'A spoon you would use like a cup' };
   
-      // map through spoonsarr and make a post request per each.
+      // send newSpoon to server/db
       const postResponse = await request(app)
         .post('/spoons')
         .send(newSpoon);
-      // get all them spoons.
+
+      // attempt to edit newSpoon.
       const putResponse = await request(app)
         .put(`/spoons/${postResponse.body.id}`)
         .send({ ...edittedSpoon, id: postResponse.body.id });
 
+      // retrieve the mentioned spoon
       const getResponse = await request(app)
         .get(`/spoons/${postResponse.body.id}`);
-        //   spoons be spoons?
+
+      //  Is the retrieved spoon equivalent to the editted one? 
       expect(getResponse.body).toEqual(putResponse.body);
     });
 
 
     //    - should DELETE /cats/:id
+    it('PUTs /spoons/id', async () => {
+      const newSpoon = { type: 'soup', material: 'steel', description: 'A spoon you would use to serve soup' };
+    
+      // send newspoon to server/db
+      const postResponse = await request(app)
+        .post('/spoons')
+        .send(newSpoon);
+
+      // attempt to delete the mentioned spoon
+      await request(app)
+        .delete(`/spoons/${postResponse.body.id}`);
+  
+      // attempt to retrieve the mentioned spoon
+      const getResponse = await request(app)
+        .get(`/spoons/${postResponse.body.id}`);
+      //  getResponse should be null.
+      expect(getResponse.body).toEqual(null);
+    });
   }); 
 });
 
