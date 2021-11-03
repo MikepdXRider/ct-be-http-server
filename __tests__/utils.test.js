@@ -10,7 +10,6 @@ const { rmdir, mkdir } = require('fs/promises');
 const parseBody = require('../lib/utils/parse-body.js');
 // import eventemitter from events
 const EventEmitter = require('events');
-const { get } = require('../resource.js');
 
 
 // create a new route
