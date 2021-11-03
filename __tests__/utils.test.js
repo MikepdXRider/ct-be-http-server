@@ -28,7 +28,7 @@ describe('tests app behaviors', () => {
   describe('tests body parser function behavior', () => {
     // tests for body parser:
     //  - returns null if method is not POST, PUT, or PATCH
-    it('it returns null if method is not POST, PUT, or PATCH', async () => {
+    it('returns null if method is not POST, PUT, or PATCH', async () => {
       const fakeRequest = { method: 'GET' };
         
       const actual = await parseBody(fakeRequest);
@@ -37,7 +37,7 @@ describe('tests app behaviors', () => {
     });
     
     //  - throws if content-type is not application/json
-    it('it throws an error if the content-type is not application/json', async () => {
+    it('throws an error if the content-type is not application/json', async () => {
       const fakeRequest = {
         method: 'POST',
         headers: {
@@ -53,7 +53,7 @@ describe('tests app behaviors', () => {
     });
     
     //  - returns deserialized body from req emitted events (using JSON.parse)
-    it('it returns deserialized body from req emitted events (using JSON.parse)', async () => {
+    it('returns deserialized body from req emitted events (using JSON.parse)', async () => {
       // asigns a new eventemitter to req variable. An event emitter will allow an event listener to be triggered.
       const request = new EventEmitter();
       // assigns the content header type to our request so our listener/parsebody function knows how to handle.
@@ -76,7 +76,7 @@ describe('tests app behaviors', () => {
     });
     
     //  - throws if failure happens in deserialization
-    it('it throws if failure happens in deserialization', async () => {
+    it('throws if failure happens in deserialization', async () => {
       // asigns a new eventemitter to req variable. An event emitter will allow an event listener to be triggered.
       const request = new EventEmitter();
       // assigns the content header type to our request so our listener/parsebody function knows how to handle.
@@ -113,7 +113,7 @@ describe('tests app behaviors', () => {
 
     //   tests for resource router:  
     //    - should match POST /cats and GET /cats/:id
-    it('should match POST /spoons and GET /spoons/:id', async () => {
+    it('matches POST /spoons and GET /spoons/:id', async () => {
       const newSpoon = {
         type: 'soup',
         material: 'steel',
@@ -135,7 +135,7 @@ describe('tests app behaviors', () => {
 
 
     //    - should GET /cats
-    it('should get /spoons', async () => {
+    it('gets /spoons', async () => {
       const newSpoon = { type: 'soup', material: 'steel', description: 'A spoon you would use to serve soup' };
       const newSpoon2 = { type: 'salad', material: 'silver', description: 'A spoon you would use to serve salad' };
       const newSpoon3 = { type: 'meat', material: 'meat', description: 'An edible meat spoon you would use to eat meat' };
@@ -156,7 +156,7 @@ describe('tests app behaviors', () => {
     });
 
     //    - should PUT /cats/:id
-    it('should PUT /spoons/id', async () => {
+    it('PUTs /spoons/id', async () => {
       const newSpoon = { type: 'soup', material: 'steel', description: 'A spoon you would use to serve soup' };
       const edittedSpoon = { type: 'cup', material: 'plastic', description: 'A spoon you would use like a cup' };
   
@@ -175,7 +175,7 @@ describe('tests app behaviors', () => {
       expect(getResponse.body).toEqual(putResponse.body);
     });
 
-    
+
     //    - should DELETE /cats/:id
   }); 
 });

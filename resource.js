@@ -12,7 +12,6 @@ module.exports = {
     const bodyObj = await parseBody(req);
     await db.save(bodyObj);
     const savedObj = await db.get(bodyObj.id);
-    console.log('testing savedObj from post', savedObj);
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(savedObj));
@@ -31,10 +30,15 @@ module.exports = {
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(retrievedArr));
     }
-  }
-  // 'put': async (req, res) => {
-  //   // const body = parseBody(req);
-  // },
+  },
+  'put': async (req, res) => {
+    const bodyObj = await parseBody(req);
+    await db.edit(bodyObj);
+    const savedObj = await db.get(bodyObj.id);
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(savedObj));
+  },
   // 'delete': async (req, res) => {
   //   // const body = parseBody(req);
   // }
