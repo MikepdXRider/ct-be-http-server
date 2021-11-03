@@ -1,7 +1,7 @@
 // import app for testing.
 const app = require('../lib/app.js');
 // import simpleDB for instance creation and use.
-const SimpleDb = require('../SimpleDB.js');
+// const SimpleDb = require('../SimpleDB.js');
 // import request from supertest
 const request = require('supertest');
 // import rmdir and mkdir promises from fs.
@@ -10,7 +10,6 @@ const { rmdir, mkdir } = require('fs/promises');
 const parseBody = require('../lib/utils/parse-body.js');
 // import eventemitter from events
 const EventEmitter = require('events');
-const { get } = require('http');
 
 
 // create a new route
@@ -120,14 +119,15 @@ describe('tests app behaviors', () => {
         description: 'A spoon you would use to serve soup'
       };
 
-      const stringifiedNewSpoon = JSON.stringify(newSpoon);
+      //   const stringifiedNewSpoon = JSON.stringify(newSpoon);
 
+      //  ❗ Why don't I need to stringify this? Does supertest automatically stringiy what I'm passing in? ❗
       const postResponse = await request(app)
         .post('/spoons')
-        .send(stringifiedNewSpoon);
+        .send(newSpoon);
 
       const getResponse = await request(app)
-        .get(`/spoons/${postResponse.id}`);
+        .get(`/spoons/${postResponse.body.id}`);
 
       expect(getResponse.body).toEqual(postResponse.body);
     });
