@@ -39,8 +39,13 @@ module.exports = {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(savedObj));
   },
-  // 'delete': async (req, res) => {
-  //   // const body = parseBody(req);
-  // }
+  'delete': async (req, res) => {
+    const [, , id] = req.url.split('/');
+
+    if (id) await db.remove(id);
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'plain/text');
+    res.end('Resource Deleted!');
+  }
 };
 
