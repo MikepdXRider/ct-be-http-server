@@ -10,6 +10,7 @@ const { rmdir, mkdir } = require('fs/promises');
 const parseBody = require('../lib/utils/parse-body.js');
 // import eventemitter from events
 const EventEmitter = require('events');
+const { get } = require('../resource.js');
 
 
 // create a new route
@@ -154,8 +155,27 @@ describe('tests app behaviors', () => {
       expect(getResponse.body).toEqual(expect.arrayContaining([{ ...newSpoon3, id: expect.any(Number) }]));
     });
 
-
     //    - should PUT /cats/:id
+    it('should PUT /spoons/id', async () => {
+      const newSpoon = { type: 'soup', material: 'steel', description: 'A spoon you would use to serve soup' };
+      const edittedSpoon = { type: 'cup', material: 'plastic', description: 'A spoon you would use like a cup' };
+  
+      // map through spoonsarr and make a post request per each.
+      const postResponse = await request(app)
+        .post('/spoons')
+        .send(newSpoon);
+      // get all them spoons.
+      const putResponse = await request(app)
+        .put(`/spoons/${postResponse.body.id}`)
+        .send({ ...edittedSpoon, id: postResponse.body.id });
+
+      const getResponse = await request(app)
+        .get(`/spoons/${postResponse.body.id}`);
+        //   spoons be spoons?
+      expect(getResponse.body).toEqual(putResponse.body);
+    });
+
+    
     //    - should DELETE /cats/:id
   }); 
 });
