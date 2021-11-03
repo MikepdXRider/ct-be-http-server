@@ -140,17 +140,21 @@ describe('tests app behaviors', () => {
       const newSpoon3 = { type: 'meat', material: 'meat', description: 'An edible meat spoon you would use to eat meat' };
       const spoonsArr = [newSpoon, newSpoon2, newSpoon3];
 
-    // map through spoonsarr and make a post request per each.
+      // map through spoonsarr and make a post request per each.
       await Promise.all(spoonsArr.map(async (obj) => 
         await request(app)
           .post('/spoons')
           .send(obj)));
-    // get all them spoons.
+      // get all them spoons.
       const getResponse = await request(app)
         .get('/spoons');
-    //   spoons be spoons?
-      expect(getResponse.body).toEqual(expect.arrayContaining([...newSpoon, id: expect.any(Number)]));
+      //   spoons be spoons?
+      expect(getResponse.body).toEqual(expect.arrayContaining([{ ...newSpoon, id: expect.any(Number) }]));
+      expect(getResponse.body).toEqual(expect.arrayContaining([{ ...newSpoon2, id: expect.any(Number) }]));
+      expect(getResponse.body).toEqual(expect.arrayContaining([{ ...newSpoon3, id: expect.any(Number) }]));
     });
+
+
     //    - should PUT /cats/:id
     //    - should DELETE /cats/:id
   }); 

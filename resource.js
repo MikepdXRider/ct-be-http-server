@@ -25,6 +25,11 @@ module.exports = {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(retrievedObj));
+    } else {
+      const retrievedArr = await db.getAll();
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(retrievedArr));
     }
   }
   // 'put': async (req, res) => {
